@@ -131,7 +131,7 @@ docker_images_test(){
     done
     
     if [[ $exit_code == 0 ]]; then
-        message="all docker images exist"
+        message="all docker images specified by the env var 'docker_images' exist"
         printf "    Message: %s\n" "${message}" 
         status=$(bold $(green "PASSED")) 
         printf "    Status: %s: %s\n" "${action}" "${status}" 
