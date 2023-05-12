@@ -2,11 +2,14 @@
 
 set -o pipefail
 
+CI_ENV_FILE=ci.env
+
 echoerr (){ printf "%s\n" "$@" >&2;}
 exiterr (){ echoerr "$@"; exit 1;}
 
-if [[ ! -f ".env" ]]; then
-    echoerr "ERROR: Environment file: .env does not exist."
+
+if [[ ! -f "${CI_ENV_FILE}" ]]; then
+    echoerr "ERROR: Environment file: ${CI_ENV_FILE} does not exist."
     exit 1
 fi
 
