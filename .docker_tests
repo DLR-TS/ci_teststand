@@ -35,7 +35,7 @@
     printf "  Test: %s\n" "${name}"
     printf "    Description: %s\n" "${description}"
     printf "    Project: %s\n" "${project}"
-    if docker run -rm hello-world >/dev/null; then
+    if docker run --rm hello-world >/dev/null; then
         printf "\n"
         printf "  Action: %s\n" "$(bold ${action})"
         status=$(bold $(green "PASSED"))
