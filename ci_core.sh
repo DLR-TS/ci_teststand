@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -o pipefail
+set -e
 
 CI_ENV_FILE=ci.env
 

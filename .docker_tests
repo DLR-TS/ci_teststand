@@ -35,7 +35,7 @@
     printf "  Test: %s\n" "${name}"
     printf "    Description: %s\n" "${description}"
     printf "    Project: %s\n" "${project}"
-    if docker run hello-world; then
+    if docker run -rm hello-world >/dev/null; then
         printf "\n"
         printf "  Action: %s\n" "$(bold ${action})"
         status=$(bold $(green "PASSED"))
@@ -50,7 +50,7 @@
 
 }
 
-docker_image_test1(){
+3_docker_image_test1(){
     local action=test
     local name="docker image test #1"
     local description="tests if the docker image is set"
@@ -75,7 +75,7 @@ docker_image_test1(){
 
 }
 
-docker_image_test2(){
+4_docker_image_test2(){
     local action=test
     local name="docker image test #2"
     local description="Tests if the docker image exists specified by the 'docker_image' env var."
@@ -108,7 +108,7 @@ docker_image_test2(){
 }
 
 
-docker_images_test(){
+5_docker_images_test(){
     local action=test
     local name="docker images test"
     local description="Tests if all docker images exists specified by the 'docker_images' env var."
@@ -143,4 +143,38 @@ docker_images_test(){
     fi
     exit $exit_code
 
+}
+
+
+6_docker_images_clean_disabledtest(){
+    local action=test
+    local name="docker images clean test"
+    local description="Tests if all docker images exists specified by the 'docker_images' env var are cleaned from the local registry."
+    local status=""
+    local message=""
+    local exit_code=0
+    printf "\n"
+    printf "  Test: %s\n" "${name}"
+    printf "    Description: %s\n" "${description}"
+    printf "    Docker images: \n"
+    for image in "${docker_images[@]}"; do
+        if [[ "$(docker images -q "${image}" 2> /dev/null)" != "" ]]; then
+            printf "      Docker image: %-95s %s\n" "${image}" "$(bold "$(red "EXISTS")")" 
+            exit_code=1
+        else
+            printf "      Docker image: %-95s %s\n" "${image}" "$(bold "$(green "DOES NOT EXISTS")")" 
+        fi
+    done
+    if [[ $exit_code == 0 ]]; then
+        message="all docker images specified by the env var 'docker_images' are clean from the local registry"
+        printf "    Message: %s\n" "${message}" 
+        status=$(bold $(green "PASSED")) 
+        printf "    Status: %s: %s\n" "${action}" "${status}" 
+    else
+        message="some docker images were not cleaned"
+        printf "    Message: %s\n" "${message}"
+        status=$(bold $(red "FAILED"))
+        printf "    Status: %s\n" "${status}"
+    fi
+    exit $exit_code
 }
