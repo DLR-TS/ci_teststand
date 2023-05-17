@@ -15,13 +15,13 @@ ci_pipeline:
 
 .PHONY: load_docker_images
 load_docker_images: set_env
-	@docker load --input "${ROOT_DIR}/${PROJECT}/build/*.tar" >/dev/null 2>&1 || true 
+	@docker load --input ${ROOT_DIR}/${PROJECT}/build/*.tar
 
 .PHONY: save_docker_images
 save_docker_images: set_env
 	@source ${ROOT_DIR}/ci.env && \
     for docker_image in "$${docker_images[@]}"; do\
-        docker save --output "${ROOT_DIR}/${PROJECT}/build/$${docker_image//:/_}.tar" $${docker_image} >/dev/null 2>&1 || true;\
+        docker save --output "${ROOT_DIR}/${PROJECT}/build/$${docker_image//:/_}.tar" $${docker_image};\
     done;
 
 endif
