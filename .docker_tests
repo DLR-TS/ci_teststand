@@ -78,7 +78,7 @@
 4_docker_image_test2(){
     local action=test
     local name="docker image test #2"
-    local description="Tests if the docker image exists specified by the 'docker_image' env var."
+    local description="Tests if the docker image exists specified by the 'docker_image' env var. The command 'docker images ${docker_image}' should produce 1 element."
     local status=""
     local message=""
     printf "\n"
