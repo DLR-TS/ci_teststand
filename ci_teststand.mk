@@ -15,7 +15,7 @@ ci_pipeline:
 
 .PHONY: load_docker_images
 load_docker_images: set_env
-	@docker load --input ${ROOT_DIR}/${PROJECT}/build/*.tar
+	@find ${ROOT_DIR}/${PROJECT}/build -maxdepth 1 -type f -name "**.tar" -exec  docker load --input {} \;
 
 .PHONY: save_docker_images
 save_docker_images: set_env
