@@ -64,6 +64,6 @@ ci_run(){
     fi
     end=$(date +%s)
     diff=$((end - start))
-    printf "\n  Execution time(hh:mm:ss): %02d:%02d:%02d\n\n" $((diff / 3600)) $((diff % 3600 / 60)) $((diff % 60)) | tee -a "${SUBMODULES_PATH}/${project}.ci.log"
+    printf "\n  Execution time(hh:mm:ss): %02d:%02d:%02d\n\n" $((diff / 3600)) $((diff % 3600 / 60)) $((diff % 60)) | tee -a "${SUBMODULES_PATH}/.log/${project}.ci.log"
 }
 
