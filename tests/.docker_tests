@@ -14,12 +14,12 @@
         printf "\n"
         printf "  Action: %s\n" "$(bold ${action})"
         status=$(bold $(green "PASSED"))
-        printf "    Status: %s: %s\n" "${action}" "${status}"
+        printf "    %-77s %s\n" "Status:" "${status}"
     else
         printf "\n"
         printf "  Action: %s\n" "$(bold ${action})"
         status=$(bold $(red "FAILED"))
-        printf "    Status: %s: %s\n" "${action}" "${status}"
+        printf "    %-77s %s\n" "Status:" "${status}"
         exit 1
     fi
 
@@ -39,12 +39,12 @@
         printf "\n"
         printf "  Action: %s\n" "$(bold ${action})"
         status=$(bold $(green "PASSED"))
-        printf "    Status: %s: %s\n" "${action}" "${status}"
+        printf "    %-77s %s\n" "Status:" "${status}"
     else
         printf "\n"
         printf "  Action: %s\n" "$(bold ${action})"
         status=$(bold $(red "FAILED"))
-        printf "    Status: %s: %s\n" "${action}" "${status}"
+        printf "    %-77s %s\n" "Status:" "${status}"
         exit 1
     fi
 
@@ -64,12 +64,12 @@
         message="Docker image is set and is not empty"
         printf "    Message: %s\n" "${message}"
         status=$(bold $(green "PASSED"))
-        printf "    Status: %s: %s\n" "${action}" "${status}"
+        printf "    %-77s %s\n" "Status:" "${status}"
     else
         message="Docker image is not set or is empty"
         printf "    Message: %s\n" "${message}"
         status=$(bold $(red "FAILED"))
-        printf "    Status: %s: %s\n" "${action}" "${status}"
+        printf "    %-77s %s\n" "Status:" "${status}"
         exit 1
     fi
 
@@ -87,22 +87,22 @@
     printf "    Docker image: %s\n" "${docker_image}"
     if [ ! -n "${docker_image+x}" ] && [ ! -n "$docker_image" ]; then
         message="No docker image specified"
-        printf "    Message: %s\n" "${message}"
+        printf "    Message: %-76s\n" "${message}"
         status=$(bold $(green "PASSED"))
-        printf "    Status: %s: %s\n" "${action}" "${status}"
+        printf "    %-77s %s\n" "Status:" "${status}"
         exit 0 
     fi
 
     if [[ "$(docker images -q "${docker_image}" 2> /dev/null)" != "" ]]; then
         message="Docker image exists"
-        printf "    Message: %s\n" "${message}"
+        printf "    Message: %-76s\n" "${message}"
         status=$(bold $(green "PASSED"))
-        printf "    Status: %s: %s\n" "${action}" "${status}"
+        printf "    %-77s %s\n" "Status:" "${status}"
     else
         message="Docker image does not exist"
-        printf "    Message: %s\n" "${message}"
+        printf "    Message: %-76s\n" "${message}"
         status=$(bold $(red "FAILED"))
-        printf "    Status: %s: %s\n" "${action}" "${status}"
+        printf "    %-77s %s\n" "Status:" "${status}"
         exit 1
     fi
 }
@@ -122,9 +122,9 @@
  
     for image in "${docker_images[@]}"; do
         if [[ "$(docker images -q "${image}" 2> /dev/null)" != "" ]]; then
-            printf "      Docker image: %-95s %s\n" "${image}" "$(bold "$(green "EXISTS")")" 
+            printf "        Docker image: %-59s %s\n" "${image}" "$(bold "$(green "EXISTS")")" 
         else
-            printf "      Docker image: %-95s %s\n" "${image}" "$(bold "$(red "DOES NOT EXISTS")")" 
+            printf "        Docker image: %-59s %s\n" "${image}" "$(bold "$(red "DOES NOT EXISTS")")" 
             exit_code=1
         fi
 
@@ -132,14 +132,14 @@
     
     if [[ $exit_code == 0 ]]; then
         message="all docker images specified by the env var 'docker_images' exist"
-        printf "    Message: %s\n" "${message}" 
+        printf "    Message: %s\n" "${message}"
         status=$(bold $(green "PASSED")) 
-        printf "    Status: %s: %s\n" "${action}" "${status}" 
+        printf "    %-77s %s\n" "Status:" "${status}"
     else
         message="some docker images missing"
         printf "    Message: %s\n" "${message}"
         status=$(bold $(red "FAILED"))
-        printf "    Status: %s\n" "${status}"
+        printf "    %-77s %s\n" "Status:" "${status}"
     fi
     exit $exit_code
 
@@ -169,12 +169,12 @@
         message="all docker images specified by the env var 'docker_images' are clean from the local registry"
         printf "    Message: %s\n" "${message}" 
         status=$(bold $(green "PASSED")) 
-        printf "    Status: %s: %s\n" "${action}" "${status}" 
+        printf "    %-77s %s\n" "Status:" "${status}"
     else
         message="some docker images were not cleaned"
         printf "    Message: %s\n" "${message}"
         status=$(bold $(red "FAILED"))
-        printf "    Status: %s\n" "${status}"
+        printf "    %-77s %s\n" "Status:" "${status}"
     fi
     exit $exit_code
 }
