@@ -57,13 +57,14 @@ ci_common_test (){
 
 ci_run(){
     start=$(date +%s)
+    logdir="$(pwd)/.log"
     if declare -f "$1" > /dev/null; then
-        "$@" | ci_log
+        "$@" | ci_log "${logdir}"
     else
-        ci_pipeline | ci_log 
+        ci_pipeline | ci_log "${logdir}" 
     fi
     end=$(date +%s)
     diff=$((end - start))
-    printf "\n  Execution time(hh:mm:ss): %02d:%02d:%02d\n\n" $((diff / 3600)) $((diff % 3600 / 60)) $((diff % 60)) | tee -a "${SUBMODULES_PATH}/.log/${project}.ci.log"
+    printf "\n  Execution time(hh:mm:ss): %02d:%02d:%02d\n\n" $((diff / 3600)) $((diff % 3600 / 60)) $((diff % 60)) | tee -a "${logdir}/${project}.ci.log"
 }
 

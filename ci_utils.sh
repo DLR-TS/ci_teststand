@@ -17,8 +17,9 @@ iso8601_datetime() {
 }
 
 ci_log() {
-    local logdir="${SUBMODULES_PATH}/.log"
+    local logdir="${1}"
     local logfile="${logdir}/${project}.ci.log"
+ 
     mkdir -p "${logdir}"
     touch "${logfile}"
     if [[ ! -f "${logfile}" ]]; then
