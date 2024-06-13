@@ -28,20 +28,25 @@ load_docker_images: set_env
 	    exit 0; \
 	fi
 
-
 .PHONY: save_docker_images
+
 save_docker_images: set_env
 	@source ${ROOT_DIR}/ci.env && \
 	if [ -d "${ROOT_DIR}/${PROJECT}" ]; then \
+		echo "Saving docker images to: ${ROOT_DIR}/${PROJECT}/build"; \
 		mkdir -p ${ROOT_DIR}/${PROJECT}/build && \
 		for docker_image in "$${docker_images[@]}"; do \
+			echo "    Saving image: $${docker_image} to ${ROOT_DIR}/${PROJECT}/build/$${docker_image//:/_}.tar"; \
 			docker save --output "${ROOT_DIR}/${PROJECT}/build/$${docker_image//:/_}.tar" $${docker_image}; \
 		done; \
 	else \
+		echo "Saving docker images to: ${ROOT_DIR}/build"; \
 		mkdir -p "${ROOT_DIR}/build"; \
 		for docker_image in "$${docker_images[@]}"; do \
+			echo "    Saving image: $${docker_image} to ${ROOT_DIR}/build/$${docker_image//:/_}.tar"; \
 			docker save --output "${ROOT_DIR}/build/$${docker_image//:/_}.tar" $${docker_image}; \
 		done; \
 	fi
+
 
 endif
