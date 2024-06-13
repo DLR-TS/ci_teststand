@@ -12,16 +12,36 @@ ci_test:
 ci_pipeline:
 	cd ${ROOT_DIR} && bash .ci
 
-
 .PHONY: load_docker_images
+
 load_docker_images: set_env
-	@find ${ROOT_DIR}/${PROJECT}/build -maxdepth 1 -type f -name "**.tar" -exec  docker load --input {} \;
+	@if [ -d "${ROOT_DIR}/${PROJECT}" ]; then \
+		echo "Loading docker images in: \"${ROOT_DIR}/${PROJECT}/build\" ..."; \
+	    find ${ROOT_DIR}/${PROJECT}/build -maxdepth 1 -type f -name "*.tar" -exec docker load --input {} \; ;\
+	    exit 0; \
+	elif [ -d "${ROOT_DIR}/build" ]; then \
+	    echo "Loading docker images in: \"${ROOT_DIR}/build\" ..."; \
+	    find ${ROOT_DIR}/build -maxdepth 1 -type f -name "*.tar" -exec docker load --input {} \; ;\
+	    exit 0; \
+	else \
+	    echo "No docker images to load."; \
+	    exit 0; \
+	fi
+
 
 .PHONY: save_docker_images
 save_docker_images: set_env
 	@source ${ROOT_DIR}/ci.env && \
-    for docker_image in "$${docker_images[@]}"; do\
-        docker save --output "${ROOT_DIR}/${PROJECT}/build/$${docker_image//:/_}.tar" $${docker_image};\
-    done;
+	if [ -d "${ROOT_DIR}/${PROJECT}" ]; then \
+		mkdir -p ${ROOT_DIR}/${PROJECT}/build && \
+		for docker_image in "$${docker_images[@]}"; do \
+			docker save --output "${ROOT_DIR}/${PROJECT}/build/$${docker_image//:/_}.tar" $${docker_image}; \
+		done; \
+	else \
+		mkdir -p "${ROOT_DIR}/build"; \
+		for docker_image in "$${docker_images[@]}"; do \
+			docker save --output "${ROOT_DIR}/build/$${docker_image//:/_}.tar" $${docker_image}; \
+		done; \
+	fi
 
 endif
